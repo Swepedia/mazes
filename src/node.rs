@@ -1,20 +1,22 @@
+use petgraph::graph::NodeIndex;
+
 pub struct Node {
-    x: i32,
-    y: i32,
-    north: Option<i32>,
-    east: Option<i32>,
-    south: Option<i32>,
-    west: Option<i32>,
+    pub x: u32,
+    pub y: u32,
+    pub north: Option<NodeIndex>,
+    pub east: Option<NodeIndex>,
+    pub south: Option<NodeIndex>,
+    pub west: Option<NodeIndex>,
 }
 
 impl Node {
     pub fn new(
-        x: i32,
-        y: i32,
-        north: Option<i32>,
-        east: Option<i32>,
-        south: Option<i32>,
-        west: Option<i32>,
+        x: u32,
+        y: u32,
+        north: Option<NodeIndex>,
+        east: Option<NodeIndex>,
+        south: Option<NodeIndex>,
+        west: Option<NodeIndex>,
     ) -> Self {
         Self {
             x,
