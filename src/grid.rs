@@ -32,7 +32,7 @@ impl Grid {
                 } else {
                     west = Some(NodeIndex::new((i * columns + j - 1) as usize));
                 }
-                if j == rows - 1 {
+                if j == columns - 1 {
                     east = None;
                 } else {
                     east = Some(NodeIndex::new((i * columns + j + 1) as usize))
@@ -51,59 +51,36 @@ impl Grid {
     pub fn print_ascii(&self) {
         // Top row
         for _ in 0..self.columns {
-            print!("++---");
+            print!("+---");
         }
         println!("+");
 
         // Body
-        // for i in 0..self.rows {
-        //     print!("|");
-        //     for j in 0..self.columns {
-        //         let mut west = "|";
-        //         let mut east = "|";
-        //         let mut south = "___";
-        //         if self.graph[NodeIndex::new((i * self.columns + j) as usize)].west == None {
-        //             west = " ";
-        //         }
-        //         if self.graph[NodeIndex::new((i * self.columns + j) as usize)].east == None {
-        //             east = " ";
-        //         }
-        //         if self.graph[NodeIndex::new((i * self.columns + j) as usize)].south == None {
-        //             south = "   ";
-        //         }
-
-        //         print!("{}{}{}", west, south, east);
-        //     }
-        //     println!("|");
-        // }
-
         for i in self.graph.node_indices() {
-            let mut west = "|";
+            let mut west = "";
             let mut east = "|";
             let mut south = "___";
             let has_west = self.graph[i].west.is_some();
             let has_east = self.graph[i].east.is_some();
             let has_south = self.graph[i].south.is_some();
             for j in self.graph.neighbors(i) {
-                if has_west && self.graph[i].west.unwrap() == j {
-                    west = " ";
-                } else if has_east && self.graph[i].east.unwrap() == j {
+                if has_east && self.graph[i].east.unwrap() == j {
                     east = " ";
                 } else if has_south && self.graph[i].south.unwrap() == j {
                     south = "   ";
                 }
             }
+            if !has_west {
+                west = "|";
+            }
+            if east == " " && south == "___" {
+                east = "_";
+            }
 
             print!("{}{}{}", west, south, east);
             if !has_east {
-                println!("|");
+                println!("");
             }
         }
-
-        // Bottom row
-        for _ in 0..self.columns {
-            print!("++---");
-        }
-        println!("+");
     }
 }
