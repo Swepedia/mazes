@@ -1,5 +1,6 @@
 use petgraph::graph::NodeIndex;
 
+#[derive(Debug)]
 pub struct Node {
     pub x: u32,
     pub y: u32,
