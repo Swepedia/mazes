@@ -48,6 +48,18 @@ impl Grid {
         }
     }
 
+    pub fn each_row(&self) -> Vec<Vec<NodeIndex>> {
+        let mut row_list = Vec::<Vec<NodeIndex>>::new();
+        for i in 0..self.rows {
+            let mut row = Vec::<NodeIndex>::new();
+            for j in 0..self.columns {
+                row.push(NodeIndex::new((i * self.columns + j) as usize));
+            }
+            row_list.push(row);
+        }
+        row_list
+    }
+
     pub fn print_ascii(&self) {
         // Top row
         for _ in 0..self.columns {
