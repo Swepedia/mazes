@@ -6,10 +6,11 @@ mod grid;
 mod node;
 
 fn main() {
-    let mut graph = Grid::new(20, 11);
-    //let maze = binary_tree(&mut graph);
-    let maze = sidewinder(&mut graph);
-    maze.print_ascii();
+    let mut graph = Grid::new(70, 70);
+    let maze = binary_tree(&mut graph);
+    //let maze = sidewinder(&mut graph);
+    //maze.print_ascii();
+    maze.print_png(15);
 }
 
 fn binary_tree(input_graph: &mut Grid) -> &mut Grid {

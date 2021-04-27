@@ -1,4 +1,5 @@
 use crate::node::*;
+use image::{GrayImage, Luma};
 use petgraph::graph::NodeIndex;
 use petgraph::{Graph, Undirected};
 
@@ -37,7 +38,7 @@ impl Grid {
                 } else {
                     east = Some(NodeIndex::new((i * columns + j + 1) as usize))
                 }
-                graph.add_node(Node::new(i, j, north, east, south, west));
+                graph.add_node(Node::new(j, i, north, east, south, west));
             }
         }
 
@@ -94,5 +95,51 @@ impl Grid {
                 println!("");
             }
         }
+    }
+
+    pub fn print_png(&self, size: u32) {
+        let cell_size = size;
+        let img_width = self.columns * cell_size;
+        let img_height = self.rows * cell_size;
+
+        // Initialize image as white sheet
+        let mut img = GrayImage::from_fn(img_width + 1, img_height + 1, |_, _| Luma([255u8]));
+
+        // Draw outside borders
+        for i in 0..img_width {
+            img.put_pixel(i, 0, Luma([0u8]));
+            img.put_pixel(i, img_height, Luma([0u8]));
+        }
+        for i in 0..img_height {
+            img.put_pixel(0, i, Luma([0u8]));
+            img.put_pixel(img_width, i, Luma([0u8]));
+        }
+
+        // Add the cells to the image
+        for i in self.graph.node_indices() {
+            let x1 = self.graph[i].x * cell_size;
+            let y1 = self.graph[i].y * cell_size;
+            let x2 = (self.graph[i].x + 1) * cell_size;
+            let y2 = (self.graph[i].y + 1) * cell_size;
+            let has_east = self.graph[i].east.is_some();
+            let has_south = self.graph[i].south.is_some();
+
+            // Draw if cells aren't connected
+            let mut local_neighbors = Vec::<NodeIndex>::new();
+            for j in self.graph.neighbors(i) {
+                local_neighbors.push(j);
+            }
+            if has_east && !local_neighbors.contains(&self.graph[i].east.unwrap()) {
+                for k in 0..cell_size {
+                    img.put_pixel(x2, y1 + k, Luma([0u8]));
+                }
+            }
+            if has_south && !local_neighbors.contains(&self.graph[i].south.unwrap()) {
+                for k in 0..cell_size {
+                    img.put_pixel(x1 + k, y2, Luma([0u8]));
+                }
+            }
+        }
+        img.save("maze.png").expect("Failed to write");
     }
 }
