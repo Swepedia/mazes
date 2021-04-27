@@ -64,15 +64,15 @@ impl Grid {
     pub fn print_ascii(&self) {
         // Top row
         for _ in 0..self.columns {
-            print!("+---");
+            print!("__");
         }
-        println!("+");
+        println!("_");
 
         // Body
         for i in self.graph.node_indices() {
             let mut west = "";
             let mut east = "|";
-            let mut south = "___";
+            let mut south = "_";
             let has_west = self.graph[i].west.is_some();
             let has_east = self.graph[i].east.is_some();
             let has_south = self.graph[i].south.is_some();
@@ -80,13 +80,13 @@ impl Grid {
                 if has_east && self.graph[i].east.unwrap() == j {
                     east = " ";
                 } else if has_south && self.graph[i].south.unwrap() == j {
-                    south = "   ";
+                    south = " ";
                 }
             }
             if !has_west {
                 west = "|";
             }
-            if east == " " && south == "___" {
+            if east == " " && south == "_" {
                 east = "_";
             }
 
